@@ -45,7 +45,7 @@ class MainViewModel(private val apiHelper: ApiHelper, private val dbHelper: DbHe
                     }
                     users.value = Resource.success(usersToInsertInDB)
 
-                }, { throwable -> users.value = (Resource.error(null, throwable.toString())) })
+                }, { throwable -> users.value = (Resource.error(throwable.toString(), null)) })
         )
     }
 

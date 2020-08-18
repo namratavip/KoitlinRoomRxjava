@@ -18,7 +18,6 @@ import com.androidmodule.kotlinroomrxjava.ui.main.adapter.MainAdapter
 import com.androidmodule.kotlinroomrxjava.ui.main.viewmodel.MainViewModel
 import com.androidmodule.kotlinroomrxjava.util.Status
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,24 +33,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setObserver() {
-        mainViewModel.getUsers().observe(this, Observer {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    progress_bar.visibility = View.GONE
-                    it.data?.let { users -> renderList(users) }
-                    recyclerView.visibility = View.VISIBLE
+            mainViewModel.getUsers().observe(this, Observer {
+                when (it.status) {
+                    Status.SUCCESS -> {
+                        progress_bar.visibility = View.GONE
+                        it.data?.let { users -> renderList(users) }
+                        recyclerView.visibility = View.VISIBLE
+                    }
+                    Status.LOADING -> {
+                        progress_bar.visibility = View.VISIBLE
+                        recyclerView.visibility = View.GONE
+                    }
+                    Status.ERROR -> {
+                        //Handle Error
+                        progress_bar.visibility = View.GONE
+                        Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                    }
                 }
-                Status.LOADING -> {
-                    progress_bar.visibility = View.VISIBLE
-                    recyclerView.visibility = View.GONE
-                }
-                Status.ERROR -> {
-                    //Handle Error
-                    progress_bar.visibility = View.GONE
-                    Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
-                }
-            }
-        })
+            })
     }
 
     private fun renderList(users: List<User>) {
